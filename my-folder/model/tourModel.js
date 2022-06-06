@@ -1,5 +1,6 @@
 const mongose = require('mongoose');
 const validator = require('validator');
+const slugify = require('slugify');
 //const User = require('./userModel');
 
 const tourSchema = new mongose.Schema(
@@ -39,7 +40,7 @@ const tourSchema = new mongose.Schema(
       type: Number,
       default: 0
     },
-
+    slug:String,
     price: {
       type: Number,
       required: [true, 'A tour must have a price']
@@ -83,8 +84,7 @@ const tourSchema = new mongose.Schema(
       address: String,
       description: String
     },
-    location: {
-      //GeoJSON
+    locations: [{
       type: {
         type: String,
         default: 'Point',
@@ -94,7 +94,7 @@ const tourSchema = new mongose.Schema(
       address: String,
       description: String,
       day: Number
-    },
+    }],
     guides: [
       {
         type: mongose.Schema.ObjectId,
@@ -109,6 +109,11 @@ const tourSchema = new mongose.Schema(
 );
 tourSchema.virtual('durationWeeks').get(function() {
   return this.duration / 7;
+});
+
+tourSchema.pre('save', function(next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
 });
 //Embedding
 // tourSchema.pre('save', async function(next) {
