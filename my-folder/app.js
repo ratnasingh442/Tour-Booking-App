@@ -8,6 +8,7 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const bookingRouter = require('./routes/bookingRoutes');
 const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
@@ -67,7 +68,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  console.log(req.cookies);
+  // console.log(req.cookies);
   next();
 });
 
@@ -79,6 +80,7 @@ app.use('/',viewRouter);
 app.use('/app/v1/tours', tourRouter);
 app.use('/app/v1/users', userRouter);
 app.use('/app/v1/review', reviewRouter);
+app.use('/app/v1/booking', bookingRouter);
 
 app.all('*', (req, res, next) => {
   // const err = new Error(`Can't find ${req.originalUrl} on this server`);

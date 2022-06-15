@@ -6,7 +6,7 @@ const catchAsync = require('./../utils/catchAsyn');
 exports.getBase = (req,res) => {
     res.status(200).render('base',{
       tour:'The Forest Hiker',
-      user:'Ratna'
+      user:req.user
     });
 }
 
@@ -48,4 +48,13 @@ exports.getLoginForm = (req,res) => {
   res.status(200).render('login',{
     title:'Log into your account'
   });
+}
+
+exports.getAccount = (req, res) => {
+  console.log("Inside getaccount");
+  res.status(200).render('account',{
+    title:'Your account',
+    user: req.user
+  });
+  
 }

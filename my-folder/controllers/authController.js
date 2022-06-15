@@ -4,7 +4,7 @@ const { promisify } = require('util');
 const User = require('./../model/userModel');
 const catchAsyn = require('./../utils/catchAsyn');
 const AppError = require('./../utils/appError');
-const sendEmail = require('./../utils/email');
+const Email = require('./../utils/email');
 
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -22,6 +22,10 @@ if ((process.env.NODE_ENV || '').trim() === 'production') {
 }
 exports.signup = catchAsyn(async (req, res, next) => {
   const newUser = await User.create(req.body);
+
+  const url = `${req.protocol}://${req.get('host')}/me`;
+  console.log(url);
+  await new Email(newUser, url).sendWelcome();
   newUser.password = undefined;
   const token = signToken(newUser._id);
   res.cookie('jwt', token, cookieOptions);
@@ -66,6 +70,7 @@ exports.logout = (req , res ) => {
   });
 }
 exports.protect = catchAsyn(async (req, res, next) => {
+  console.log("Inside protect");
   //1)Get token and check if it exists
   let token;
   if (
@@ -75,7 +80,7 @@ exports.protect = catchAsyn(async (req, res, next) => {
     token = req.headers.authorization.split(' ')[1];
     console.log(token);
   }
-  else if(req.cookies.jwt){
+  else if(req.cookies.jwt && req.cookies.jwt !== 'loggedout'){
     token = req.cookies.jwt;
 
   }
@@ -107,6 +112,7 @@ exports.protect = catchAsyn(async (req, res, next) => {
 
   // // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
 
@@ -159,16 +165,17 @@ exports.forgotPassword = catchAsyn(async (req, res, next) => {
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
   //Send it back as email
-  const resetURL = `${req.protocol}://${req.get(
-    'host'
-  )}/app/v1/users/resetPassword/${resetToken}`;
+  const resetURL = `${req.protocol}://${req.get('host')}/app/v1/users/resetPassword/${resetToken}`;
+  console.log(resetURL);
   const message = `Forgot your password?Click on this url ${resetURL} and create a new password.\n If you have not created this request then ignore this message!`;
   try {
-    await sendEmail({
-      email: user.email,
-      subject: 'Your password reset token.(Valid for 10 min)',
-      message
-    });
+    // await sendEmail({
+    //   email: user.email,
+    //   subject: 'Your password reset token.(Valid for 10 min)',
+    //   message
+    // });
+
+    await new Email(user, resetURL).sendResetPassword();
 
     res.status(200).json({
       status: 'success',
