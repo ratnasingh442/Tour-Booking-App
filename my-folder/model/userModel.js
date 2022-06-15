@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     lowwercase: true,
     validate: [validator.isEmail, 'Invalid email']
   },
-  photo: String,
+  photo: {type: String, default:'default.jpg'},
   role: {
     type: String,
     enum: ['admin', 'user', 'guide', 'lead-guide'],
@@ -80,17 +80,17 @@ userSchema.methods.createPasswordResetToken = function() {
   console.log(this.passwordResetToken);
   return resetToken;
 };
-// userSchema.pre('save', async function(next) {
-//   if (!this.isModified('password')) return next();
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
 
-//   this.password = await bcrypt.hash(this.password, 12);
-//   this.confirmPassword = undefined;
-//   next();
-// });
-// userSchema.pre('save', async function(next) {
-//   if (!this.isModified('password')) return next();
-//   this.passwordChanged = Date.now() - 1000;
-//   next();
-// });
+  this.password = await bcrypt.hash(this.password, 12);
+  this.confirmPassword = undefined;
+  next();
+});
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+  this.passwordChanged = Date.now() - 1000;
+  next();
+});
 const User = mongoose.model('User', userSchema);
 module.exports = User;

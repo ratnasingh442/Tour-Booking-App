@@ -6,12 +6,17 @@
   "scripts": {
     "start": "nodemon server.js",
     "start:prod": "SET NODE_ENV=production & nodemon server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
+    "build:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
   },
   "author": "Jonas Schmedtmann",
   "license": "ISC",
   "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "express-rate-limit": "^6.0.4",
@@ -22,6 +27,8 @@
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
     "pug": "^3.0.2",
+    "slug": "^5.2.0",
+    "slugify": "^1.6.5",
     "validator": "^13.7.0"
   },
   "devDependencies": {
@@ -33,6 +40,7 @@
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
+    "parcel-bundler": "^1.12.3",
     "prettier": "^1.17.0"
   },
   "engines": {
