@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
