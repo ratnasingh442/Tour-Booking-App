@@ -61,6 +61,8 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+app.use(compression());
+
 app.use((req, res, next) => {
   console.log('Hello from the middleware 👋');
   next();

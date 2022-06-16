@@ -5,7 +5,7 @@ export const login = async (email,password) => {
     try{
     const res = await axios({
         method:'POST',
-        url: 'http://localhost:3000/app/v1/users/login',
+        url: '/app/v1/users/login',
         data: {email,
         password
         }
@@ -22,7 +22,7 @@ export const login = async (email,password) => {
 catch(err){
     showAlert('error',err.message);
 }
-    console.log("login");
+
     
 }
 
@@ -30,7 +30,7 @@ export const logout = async() => {
     try {
         const res = await axios({
             method: 'GET',
-            url: 'http://localhost:3000/app/v1/users/logout'
+            url: '/app/v1/users/logout'
         });
         if(res.data.status === 'success')location.reload(true);
     }

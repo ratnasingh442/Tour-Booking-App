@@ -36,7 +36,6 @@ exports.updateOne = Model => catchAsyn(async (req, res, next) => {
   });
 
   exports.getOne = (Model,popOptions) => catchAsyn(async (req, res, next) => {
-    console.log(req.requestTime);
 
     let query = Model.findById(req.params.id);
     if(popOptions)query = query.populate(popOptions);
@@ -57,7 +56,6 @@ exports.updateOne = Model => catchAsyn(async (req, res, next) => {
   });
 
   exports.getAllModel  = Model =>  catchAsyn(async (req, res, next) => {
-    console.log(req.requestTime);
     let filter = {}
   if(req.params.tourId)filter = {tour:req.params.tourId};
     //BUILD QUERY
