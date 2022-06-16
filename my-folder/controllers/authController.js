@@ -24,6 +24,7 @@ exports.signup = catchAsyn(async (req, res, next) => {
   const newUser = await User.create(req.body);
 
   const url = `${req.protocol}://${req.get('host')}/me`;
+  console.log(url);
   await new Email(newUser, url).sendWelcome();
   newUser.password = undefined;
   const token = signToken(newUser._id);
@@ -69,7 +70,7 @@ exports.logout = (req , res ) => {
   });
 }
 exports.protect = catchAsyn(async (req, res, next) => {
-
+  console.log("Inside protect");
   //1)Get token and check if it exists
   let token;
   if (
@@ -77,7 +78,7 @@ exports.protect = catchAsyn(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
-    
+    console.log(token);
   }
   else if(req.cookies.jwt && req.cookies.jwt !== 'loggedout'){
     token = req.cookies.jwt;
