@@ -8,3 +8,7 @@ It is a tour booking application where users can book various types of tours.It 
 integrating MongoDB. 
 Also learned about MVC pattern
 Tech:Node.js,MongoDB,pug,Express
+
+
+If you like to explore the project:Use following credentials to login:
+Log in with "laura@example.com" and password "test1234"
